@@ -2,9 +2,7 @@
 
 A full-stack, automated web scraping pipeline and real-time dashboard built to track the pricing volatility of the Royal Kludge RK M75 keyboard on e-commerce platforms.
 
-![Dashboard Preview](https://via.placeholder.com/1000x500.png?text=Premium+Dark+Mode+Chart.js+Dashboard) <!-- Replace with actual screenshot later! -->
-
-##Overview
+## Overview
 
 This project was built to demonstrate end-to-end data engineering and full-stack deployment skills. It features a robust Python scraping script that navigates complex HTML structures, a Flask REST API to serve the extracted data, and a responsive, premium dark-mode frontend to visualize pricing trends using Chart.js.
 
