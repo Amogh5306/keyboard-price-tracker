@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Keyboard Price Tracker</title>
+    <!-- Import Chart.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Modern, sleek, dark-mode CSS */
+        body {
+            background-color: #0d1117; /* GitHub Dark mode background */
+            color: #c9d1d9;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            color: #58a6ff; /* A nice bright blue */
+            font-weight: 600;
+            margin-bottom: 10px;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(88, 166, 255, 0.3);
+        }
+
+        p.subtitle {
+            color: #8b949e;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        /* Container for the chart */
+        .chart-container {
+            width: 100%;
+            max-width: 900px;
+            background-color: #161b22;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 255, 170, 0.1);
+            border: 1px solid #30363d;
+            position: relative;
+        }
+
+        /* Subtle neon glow on hover */
+        .chart-container:hover {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 25px rgba(0, 255, 170, 0.2);
+            transition: box-shadow 0.3s ease-in-out;
+        }
+        
+        #errorMessage {
+            color: #ff7b72;
+            text-align: center;
+            display: none;
+            margin-top: 20px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Royal Kludge RK M75 Price Tracker</h1>
+    <p class="subtitle">Real-time price monitoring from Meckeys</p>
+
+    <div class="chart-container">
+        <!-- Canvas element where Chart.js will render the graph -->
+        <canvas id="priceChart"></canvas>
+    </div>
+    
+    <div id="errorMessage"></div>
+
+    <script>
+        // Use an async function to fetch data and render the chart
+        async function loadChartData() {
+            try {
+                // Fetch the JSON array from our Flask API
+                const response = await fetch('http://127.0.0.1:5000/api/prices');
+                
+                if (!response.ok) {
+                    throw new Error(`API returned status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // If it's an error message from the API (like CSV not found)
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                
+                // Parse the returned JSON array
+                // Extract timestamps for the X-axis
+                const labels = data.map(row => {
+                    // Make the timestamp slightly shorter/cleaner for the chart
+                    const dateObj = new Date(row['Timestamp']);
+                    return dateObj.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                });
+                
+                // Extract Current Price for the Y-axis
+                const prices = data.map(row => parseFloat(row['Current Price']));
+
+                // Render the Chart.js line chart
+                const ctx = document.getElementById('priceChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Current Price (₹)',
+                            data: prices,
+                            // Neon cyan accent color
+                            borderColor: '#00ffaa',
+                            backgroundColor: 'rgba(0, 255, 170, 0.1)',
+                            borderWidth: 3,
+                            pointBackgroundColor: '#00ffaa',
+                            pointBorderColor: '#161b22',
+                            pointBorderWidth: 2,
+                            pointRadius: 5,
+                            pointHoverRadius: 7,
+                            fill: true,
+                            tension: 0.3 // Smooth curves
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    color: '#c9d1d9',
+                                    font: {
+                                        size: 14,
+                                        family: "'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
+                                    }
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(13, 17, 23, 0.9)',
+                                titleColor: '#c9d1d9',
+                                bodyColor: '#00ffaa',
+                                borderColor: '#30363d',
+                                borderWidth: 1,
+                                padding: 12,
+                                displayColors: false,
+                                callbacks: {
+                                    label: function(context) {
+                                        return '₹' + context.parsed.y.toLocaleString();
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: {
+                                    color: '#30363d',
+                                    tickColor: '#30363d'
+                                },
+                                ticks: {
+                                    color: '#8b949e',
+                                    maxRotation: 45,
+                                    minRotation: 45
+                                }
+                            },
+                            y: {
+                                grid: {
+                                    color: '#30363d',
+                                    tickColor: '#30363d'
+                                },
+                                ticks: {
+                                    color: '#8b949e',
+                                    callback: function(value) {
+                                        return '₹' + value.toLocaleString();
+                                    }
+                                },
+                                // Add a bit of padding above and below min/max values
+                                suggestedMin: Math.min(...prices) * 0.95,
+                                suggestedMax: Math.max(...prices) * 1.05
+                            }
+                        }
+                    }
+                });
+                
+            } catch (error) {
+                console.error("Error loading chart data:", error);
+                const errorDiv = document.getElementById('errorMessage');
+                errorDiv.textContent = `Failed to load data: ${error.message}`;
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        // Call the function when the page loads
+        document.addEventListener('DOMContentLoaded', loadChartData);
+    </script>
+</body>
+</html>
