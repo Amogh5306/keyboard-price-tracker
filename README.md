@@ -4,7 +4,7 @@ A full-stack, automated web scraping pipeline and real-time dashboard built to t
 
 ![Dashboard Preview](https://via.placeholder.com/1000x500.png?text=Premium+Dark+Mode+Chart.js+Dashboard) <!-- Replace with actual screenshot later! -->
 
-## 🚀 Overview
+##Overview
 
 This project was built to demonstrate end-to-end data engineering and full-stack deployment skills. It features a robust Python scraping script that navigates complex HTML structures, a Flask REST API to serve the extracted data, and a responsive, premium dark-mode frontend to visualize pricing trends using Chart.js.
 
@@ -17,7 +17,7 @@ This project was built to demonstrate end-to-end data engineering and full-stack
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 * **Backend**: Python, Flask, Gunicorn (WSGI Server)
 * **Data Engineering**: BeautifulSoup4, Requests, Regex, CSV
@@ -26,7 +26,7 @@ This project was built to demonstrate end-to-end data engineering and full-stack
 
 ---
 
-## 💻 How It Works
+## How It Works
 
 ### 1. The Scraper (`scrape_title.py`)
 Spoofs a standard Chrome User-Agent to bypass basic bot-protection, requests the HTML, and parses the DOM. It extracts both the *Current Price* and the *Original MRP*, strips away all symbols and whitespace using Regular Expressions, and logs the raw numeric values into `keyboard_prices.csv`.
@@ -39,7 +39,7 @@ Fetches the JSON payload from the backend API. It maps the timestamps to the X-a
 
 ---
 
-## ⚙️ Local Setup
+## Local Setup
 
 If you want to run this project locally on your machine:
 
@@ -69,7 +69,7 @@ If you want to run this project locally on your machine:
 
 ---
 
-## ☁️ Production Deployment
+## Production Deployment
 
 * The **Frontend** is deployed as a static site on **Vercel**, enabling lightning-fast global CDN delivery.
 * The **Backend** is deployed as a Web Service on **Render.com**, utilizing `gunicorn` as a production-grade WSGI server to handle concurrent requests securely and efficiently.
