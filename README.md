@@ -1,73 +1,45 @@
-# Keyboard Price Tracker ⌨️
+# ⌨️ Keyboard Price Tracker
 
-A full-stack, automated web scraping pipeline and real-time dashboard built to track the pricing volatility of the Royal Kludge RK M75 keyboard on e-commerce platforms.
+A full-stack data pipeline that scrapes e-commerce prices, serves them via a REST API, and visualizes trends on a live dashboard.
 
-## Overview
-
-This project was built to demonstrate end-to-end data engineering and full-stack deployment skills. It features a robust Python scraping script that navigates complex HTML structures, a Flask REST API to serve the extracted data, and a responsive, premium dark-mode frontend to visualize pricing trends using Chart.js.
-
-### Architecture
-
-1. **Data Extraction**: A Python script utilizing `requests` and `BeautifulSoup` to scrape e-commerce product pages. It intelligently parses standard WooCommerce HTML structures, handling complex nested tags (`<ins>`, `<del>`) and character encoding issues (e.g., Unicode currency symbols).
-2. **Data Storage**: Data is cleaned using Regex and stored in a local, lightweight CSV "database" appended with precise timestamps.
-3. **Backend API**: A Python `Flask` application acting as the middleware, reading the CSV data and exposing it as a structured JSON API via a CORS-enabled endpoint.
-4. **Frontend Visualization**: A modern, dependency-free HTML5/CSS/Vanilla JS frontend. It fetches the JSON data asynchronously and renders an interactive line chart using `Chart.js`.
-
----
-
-## Tech Stack
-
-* **Backend**: Python, Flask, Gunicorn (WSGI Server)
-* **Data Engineering**: BeautifulSoup4, Requests, Regex, CSV
-* **Frontend**: Vanilla JavaScript, HTML5, CSS3, Chart.js
-* **Deployment**: Render (Backend API), Vercel (Static Frontend)
+**[Live Dashboard](https://amogh-keyboard-tracker.vercel.app)** · **[API Endpoint](https://keyboard-price-tracker.onrender.com/api/prices)**
 
 ---
 
 ## How It Works
 
-### 1. The Scraper (`scrape_title.py`)
-Spoofs a standard Chrome User-Agent to bypass basic bot-protection, requests the HTML, and parses the DOM. It extracts both the *Current Price* and the *Original MRP*, strips away all symbols and whitespace using Regular Expressions, and logs the raw numeric values into `keyboard_prices.csv`.
+```
+Scraper (Python) → CSV Database → Flask API → Chart.js Dashboard
+```
 
-### 2. The API (`app.py`)
-A minimal Flask server equipped with `flask-cors`. It exposes the `/api/prices` GET endpoint, safely parsing the CSV using Python's `csv.DictReader` and serializing the rows into a JSON array for web consumption.
+1. **Scrape** — Python script spoofs a Chrome User-Agent, parses WooCommerce HTML with BeautifulSoup, and extracts current + original prices
+2. **Store** — Cleans data with regex, appends timestamped rows to a CSV file
+3. **Serve** — Flask API reads the CSV and returns structured JSON via a CORS-enabled endpoint
+4. **Visualize** — Vanilla JS fetches the API and renders an interactive Chart.js line graph with a dark-mode UI
 
-### 3. The Dashboard (`index.html`)
-Fetches the JSON payload from the backend API. It maps the timestamps to the X-axis and the prices to the Y-axis. The UI is designed with a premium dark-theme aesthetic featuring neon-cyan accents and subtle glowing hover states for maximum visual impact.
+## Tech Stack
 
----
+| Layer | Tech |
+|-------|------|
+| Scraping | Python, BeautifulSoup4, Requests |
+| Backend | Flask, Flask-CORS, Gunicorn |
+| Frontend | Vanilla JS, HTML5, CSS3, Chart.js |
+| Deployment | Render (API), Vercel (Dashboard) |
 
-## Local Setup
+## Quick Start
 
-If you want to run this project locally on your machine:
+```bash
+git clone https://github.com/Amogh5306/keyboard-price-tracker.git
+cd keyboard-price-tracker
+pip install -r requirements.txt
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Amogh5306/keyboard-price-tracker.git
-   cd keyboard-price-tracker
-   ```
+python scrape_title.py   # generate data
+python app.py            # start API on :5000
+# open index.html in browser
+```
 
-2. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+## What I Learned
 
-3. **Run the scraper (to generate initial data):**
-   ```bash
-   python scrape_title.py
-   ```
-
-4. **Start the Flask API:**
-   ```bash
-   python app.py
-   ```
-
-5. **View the dashboard:**
-   Simply double-click `index.html` to open it in your browser. The chart will automatically fetch data from `http://localhost:5000`.
-
----
-
-## Production Deployment
-
-* The **Frontend** is deployed as a static site on **Vercel**, enabling lightning-fast global CDN delivery.
-* The **Backend** is deployed as a Web Service on **Render.com**, utilizing `gunicorn` as a production-grade WSGI server to handle concurrent requests securely and efficiently.
+- Navigating anti-bot protections and parsing nested HTML structures
+- Building a minimal REST API with Flask and deploying with Gunicorn
+- Connecting a frontend to a live backend across different hosting providers (Vercel ↔ Render)
