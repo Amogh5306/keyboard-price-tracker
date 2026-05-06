@@ -1,5 +1,9 @@
 # ⌨️ Keyboard Price Tracker
 
+![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
+![BeautifulSoup](https://img.shields.io/badge/BeautifulSoup-000000?style=for-the-badge&logo=python&logoColor=green)
+
 A full-stack data pipeline that scrapes e-commerce prices, serves them via a REST API, and visualizes trends on a live dashboard.
 
 **[Live Dashboard](https://amogh-keyboard-tracker.vercel.app)** · **[API Endpoint](https://keyboard-price-tracker.onrender.com/api/prices)**
