@@ -15,5 +15,8 @@ venv.bak/
 # Our local database (do not commit!)
 keyboard_prices.csv
 
+# Logs
+*.log
+
 # macOS
 .DS_Store
