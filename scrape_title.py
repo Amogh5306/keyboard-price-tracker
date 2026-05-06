@@ -1,6 +1,8 @@
-import sys, io, csv, os, re, requests
+import sys, io, csv, os, re, requests, logging
 from datetime import datetime
 from bs4 import BeautifulSoup
+
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Fix Windows terminal encoding for the ₹ symbol
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
