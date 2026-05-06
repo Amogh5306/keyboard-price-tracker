@@ -1,8 +1,9 @@
 """
-app.py — Phase 4: Serve scraped keyboard price data as a JSON API.
+Flask API — Phase 4: Serve scraped keyboard price data as a JSON API.
 
-Reads keyboard_prices.csv (produced by scrape_title.py) and exposes it
-at GET /api/prices so any frontend or tool can consume the data.
+This script reads keyboard_prices.csv (produced by scrape_title.py) and exposes it
+at GET /api/prices. This allows frontends or analytics tools to consume real-time
+pricing data for visualized tracking.
 """
 
 import csv
