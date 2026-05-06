@@ -4,6 +4,37 @@ Flask API — Phase 4: Serve scraped keyboard price data as a JSON API.
 This script reads keyboard_prices.csv (produced by scrape_title.py) and exposes it
 at GET /api/prices. This allows frontends or analytics tools to consume real-time
 pricing data for visualized tracking.
+
+===============================================================================
+ARCHITECTURE OVERVIEW
+===============================================================================
+The backend is intentionally kept lightweight and monolithic for simplicity.
+It serves a single purpose: exposing the scraped CSV dataset via a RESTful
+endpoint. 
+
+Features:
+- CORS is globally enabled to allow seamless cross-origin requests from the 
+  Vercel-hosted frontend dashboard.
+- Uses Python's built-in `csv.DictReader` to automatically map header rows 
+  to dictionary keys, ensuring robust JSON serialization.
+- Provides built-in error handling (HTTP 404) if the CSV dataset is missing,
+  preventing catastrophic crashes on the frontend.
+
+Data Format:
+The API returns a JSON array of objects. Example response:
+[
+  {
+    "Timestamp": "2026-05-06 10:00:00",
+    "Product": "Royal Kludge RK M75",
+    "MRP": "7999",
+    "Current Price": "5499"
+  }
+]
+
+Deployment:
+This API is designed to be deployed via WSGI servers like Gunicorn. 
+Example start command: `gunicorn app:app`
+===============================================================================
 """
 
 import csv

@@ -2,6 +2,34 @@ import sys, io, csv, os, re, requests, logging
 from datetime import datetime
 from bs4 import BeautifulSoup
 
+"""
+===============================================================================
+KEYBOARD PRICE SCRAPER ENGINE
+===============================================================================
+This module serves as the primary data ingestion pipeline for the Keyboard 
+Price Tracker. It systematically fetches, parses, cleans, and logs pricing 
+information from e-commerce product pages.
+
+Anti-Bot Avoidance:
+- Uses a modern, rotating-style User-Agent string to emulate a standard 
+  desktop Chrome browser.
+- Handles HTTP 403/503 responses gracefully with ConnectionError exceptions.
+
+Data Parsing Strategy (BeautifulSoup4):
+- The script targets specific nested WooCommerce DOM elements.
+- It attempts to extract both the `ins` (Sale Price) and `del` (Original MRP)
+  tags.
+- If no active sale is found, it falls back to the standard `.woocommerce-Price-amount`
+  element.
+
+Regex Data Cleaning:
+- Raw strings like `₹ 7,999` are stripped of non-numeric characters (currency 
+  symbols, commas, whitespace) using `re.sub(r"[₹,\s]", "", raw)`.
+- The final payload is stored purely as integers/floats, making charting and
+  mathematical comparisons trivially easy on the frontend.
+===============================================================================
+"""
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Fix Windows terminal encoding for the ₹ symbol
