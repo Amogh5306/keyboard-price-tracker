@@ -49,3 +49,4 @@ python app.py            # start API on :5000
 - Connecting a frontend to a live backend across different hosting providers (Vercel ↔ Render)
 <!-- Update 1 -->
 <!-- Update 2 -->
+<!-- Update 3 -->
