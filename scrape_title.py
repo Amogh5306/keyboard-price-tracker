@@ -84,11 +84,11 @@ if __name__ == "__main__":
     product = fetch_product_data(URL)
 
     # Terminal output (human-friendly, with symbols)
-    print(f"Product : {product['title']}")
+    logging.info(f"Product : {product['title']}")
     if product["mrp_raw"] and product["mrp_raw"] != product["price_raw"]:
-        print(f"MRP     : {product['mrp_raw']}  (original)")
-    print(f"Price   : {product['price_raw']}")
+        logging.info(f"MRP     : {product['mrp_raw']}  (original)")
+    logging.info(f"Price   : {product['price_raw']}")
 
     # CSV logging (clean numbers, no symbols)
     log_to_csv(product)
-    print(f"\nData successfully logged to CSV.")
+    logging.info(f"Data successfully logged to CSV.")
