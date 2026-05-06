@@ -48,3 +48,4 @@ python app.py            # start API on :5000
 - Building a minimal REST API with Flask and deploying with Gunicorn
 - Connecting a frontend to a live backend across different hosting providers (Vercel ↔ Render)
 <!-- Update 1 -->
+<!-- Update 2 -->
